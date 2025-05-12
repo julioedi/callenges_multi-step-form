@@ -1,0 +1,53 @@
+@use "colors" as *;
+@use "vars" as *;
+
+.field_text {
+    position: relative;
+    display: grid;
+    &:before{
+        @include user-select-none;
+        content:attr(data-error);
+        font-size: 14px;
+        color:$error;
+        opacity: 0;
+        transition: $transition;
+        pointer-events: none;
+        position: absolute;
+        top:8px;
+        right:0;
+        font-weight: bold;
+    }
+    label {
+        font-size: 14px;
+        padding-bottom: 8px;
+    }
+
+    input {
+        height: 46px;
+        padding: 0 14px;
+        border-radius: 8px;
+        font: inherit;
+        border: 1px solid $border;
+
+        &:focus {
+            border-color: $primary;
+        }
+    }
+
+    &:not(:first-of-type) {
+        margin-top: 16px;
+    }
+    
+    &.error{
+        &:before{
+            top:0;
+            opacity: 1;
+        }
+        input{
+            border-color: $error;
+            &:focus,&:active{
+                border-color: $error;
+            }
+        }
+    }
+}
