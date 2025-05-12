@@ -1,13 +1,18 @@
 import React, { Component, PropsWithChildren, ReactNode } from "react";
 import "@root/styles/screen.scss";
 
-interface Screenprops extends PropsWithChildren, React.HTMLAttributes<HTMLElement> {
-    title: string,
-    description?: string
+
+export declare interface globalScreenProps{
     next?: string,
     before?: string,
-    onNext?: () => void,
-    onBefore?: () => void,
+    onNext?: (data:any) => void,
+    onBefore?: (data:any) => void,
+    container?:(ref:HTMLElement|null) => void,
+    screenProps?:React.HTMLAttributes<HTMLElement>
+}
+interface Screenprops extends PropsWithChildren, React.HTMLAttributes<HTMLElement>,globalScreenProps {
+    title: string,
+    description?: string
 }
 class Screen extends Component<Screenprops> {
     Title = () => {
@@ -15,8 +20,6 @@ class Screen extends Component<Screenprops> {
             <h2>{this.props.title}</h2>
         )
     }
-
-    container:null|HTMLElement = null
 
     Description = () => {
         if (!this.props.description) {
@@ -34,9 +37,9 @@ class Screen extends Component<Screenprops> {
         return (
             <div className="before">
                 {
-                    before && (
+                    onBefore && (
                         <div className="btn" onClick={onBefore}>
-                            {before}
+                            {before ?? "Go back"}
                         </div>
                     )
                 }
@@ -58,11 +61,17 @@ class Screen extends Component<Screenprops> {
 
     render(): ReactNode {
         const { Title, Description, BtnAfter, BtnBefore } = this;
-        const {title,description,next,onBefore,onNext,before,...props} = this.props
+        const {title,description,next,onBefore,onNext,before,screenProps,className,...props} = this.props
         return (
-            <section className="screen" {...props} ref={ref =>{
-                this.container = ref;
-            }}>
+            <section 
+            {...screenProps} 
+            className={"screen" +  (screenProps?.className && screenProps.className !="" ? ` ${screenProps.className}` : "")}
+            ref={ref =>{
+                if (this.props.container) {
+                    this.props.container(ref);
+                }
+            }}
+            >
                 <header>
                     <Title />
                     <Description />

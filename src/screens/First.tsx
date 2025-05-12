@@ -1,6 +1,7 @@
 import React, { ChangeEvent, Component, ReactNode } from "react";
 import { Screen } from "@root/components/Screen";
 import { Input } from "@root/components/Input";
+import { globalScreenProps } from "@root/components/Screen";
 
 type FirstKeys = "name" | "email" | "phone";
 interface firstDefaultData {
@@ -8,11 +9,9 @@ interface firstDefaultData {
     email: string,
     phone: string,
 }
-interface FirstProps {
-    defaultData?: firstDefaultData
-    onNext?: (data: null | firstDefaultData) => void,
-    container?: (ref: HTMLElement | null) => void,
-    onChange?:(value:string,key:string) => void
+interface FirstProps extends globalScreenProps{
+    defaultData?: firstDefaultData,
+    setData?:(data:firstDefaultData) => void
 }
 export default class First extends Component<FirstProps> {
     defaultData: firstDefaultData = {
@@ -60,17 +59,13 @@ export default class First extends Component<FirstProps> {
     currentElement: null| HTMLElement = null;
     render(): ReactNode {
         const { onNext } = this;
+        const {defaultData,...props} = this.props
         return (
             <Screen
                 title="Personal Info"
                 description="Please provide you name, email address, and phone number"
+                {...props}
                 onNext={onNext}
-                ref={ref =>{
-                    if (ref && ref.container) {
-                       this.currentElement =  ref.container
-                    }
-                    this.currentElement = null;
-                }}
             >
                 <Input
                     label="Name"

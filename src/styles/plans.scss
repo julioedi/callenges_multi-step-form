@@ -1,0 +1,53 @@
+@use "colors" as *;
+@use "vars" as *;
+
+.plans_wrap {
+    display: flex;
+    gap: 24px;
+
+    .single_plan {
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid $border;
+        cursor: pointer;
+        margin-bottom: 32px;
+        transition: $transition;
+
+        &.active {
+            border-color: $border_primary;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .item {
+            display: flex;
+            flex-direction: column;
+            @include user-select-none;
+
+            .info {
+                h4 {
+                    margin-top: 44px;
+                    margin-bottom: 8px;
+                }
+
+                span {
+                    opacity: 0.5;
+                }
+            }
+
+            .legend {
+                display: flex;
+                height: 0px;
+                transition: $transition;
+                opacity: 0;
+                transform: translateY(8px);
+
+                &.active {
+                    opacity: 1;
+                    height: 16px;
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+}

@@ -29,12 +29,14 @@ type stepsNum = 1 | 2 | 3 | 4;
 interface BannerImageprops {
     initialStep?: stepsNum,
     onChangeStep?: (index: stepsNum) => void
+    visibility?:Array<boolean>
 }
 
 
 interface step {
     index: stepsNum,
     value: string,
+    visiblity?:boolean,
 }
 
 const steps: string[] = [
@@ -49,6 +51,12 @@ class BannerImage extends Component<BannerImageprops> {
     state = {
         currentStep: this.props.initialStep ?? 1
     }
+    defaultVisibility = [
+        true,
+        this.props?.visibility?.[1] ?? false,
+        this.props?.visibility?.[2] ?? false,
+        this.props?.visibility?.[3] ?? false,
+    ];
 
     /**
      * 
@@ -68,12 +76,18 @@ class BannerImage extends Component<BannerImageprops> {
     }
 
 
-    Step = ({ index, value }: step):ReactNode => {
+    Step = ({ index, value,visiblity }: step):ReactNode => {
+        const prevent = !visiblity ? " prevent" : "";
+        const active = this.state.currentStep === index ? " active" : "";
         const className = this.state.currentStep === index ? "step_item active" : "step_item";
         return (
             <li
-                className={className}
+                className={"step_item" + active + prevent}
                 onClick={() =>{
+                    console.log(this.props?.visibility);
+                    if (!this.props?.visibility?.[index - 1]) {
+                        return;
+                    }
                     this.setStep(index)
                 }}
                 data-step={index}
@@ -99,7 +113,7 @@ class BannerImage extends Component<BannerImageprops> {
                 <ul className="steps">
                     {
                         steps.map( (item,index) => (
-                            <Step value={item} index={(index + 1) as stepsNum} key={index}/>
+                            <Step value={item} index={(index + 1) as stepsNum} key={index} visiblity={this.props?.visibility?.[index]}/>
                         ))
                     }
                 </ul>

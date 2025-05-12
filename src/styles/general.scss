@@ -1,5 +1,6 @@
 @use "colors" as *;
 @use "vars" as *;
+
 :root {
     --body_bkg: #EEF5FF;
     --form_card: #FFFFFF;
@@ -11,6 +12,7 @@
     --shadowColor: rgba(8, 42, 80, 0.5);
     --btnColor: #174A8B;
     --border: #CDD4DD;
+    --border_primary: #544E94
 }
 
 .dark-mode {
@@ -30,6 +32,7 @@ body {
     padding: 0;
     font-family: "Ubuntu", sans-serif;
     background-color: $body_bkg;
+    color: $text;
 
 }
 
@@ -47,6 +50,8 @@ body {
     max-width: 940px;
     max-height: 600px;
     height: 100%;
+    padding: 16px;
+    border-radius: 28px;
     position: relative;
     display: flex;
     background-color: $form_card;
@@ -103,7 +108,9 @@ a {
     }
 }
 
-input,select,textarea{
+input,
+select,
+textarea {
     @include no-auto-fill;
     outline: none;
 }
@@ -114,12 +121,93 @@ input,select,textarea{
     border-radius: 8px;
     cursor: pointer;
     @include user-select-none;
+
     &.default {
         background-color: $btnColor;
         color: #fff;
-        &:hover{
+
+        &:hover {
             background-color: $primary;
             opacity: 0.66;
         }
+    }
+}
+
+.switch_card {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 12px;
+    font-weight: 500;
+    padding: 12px;
+    cursor: pointer;
+
+    span {
+        position: relative;
+        @include user-select-none;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: currentColor;
+        opacity: 0.05;
+        border-radius: 8px;
+    }
+
+    .toggle {
+        position: relative;
+        display: flex;
+        font-size: 12px;
+        width: 3em;
+        height: 1.675em;
+        background-color: $text;
+        border-radius: 1em;
+
+        .dot {
+            position: absolute;
+            display: flex;
+            width: 1em;
+            height: 1em;
+            border-radius: 1em;
+            background-color: $form_card;
+            top: 0.35em;
+            left: 0.35em;
+            pointer-events: none;
+            transition: $transition;
+        }
+    }
+
+    input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        z-index: 99;
+        cursor: pointer;
+
+        &:checked ~.toggle .dot {
+            left: 1.5em;
+        }
+    }
+}
+
+@keyframes popdown{
+    0% {
+        transform: scale(1);
+    }
+    33% {
+        transform: scale(1.05);
+    }
+
+    75% {
+        transform: scale(0.33);
+        opacity: 0.5;
+    }
+    100%{
+        
+        transform: scale(0);
+        opacity: 0;
     }
 }
