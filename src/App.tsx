@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "@root/styles/general.scss";
 import { BannerImage } from './components/Banner';
 
-import { First, Second } from './screens';
+import { First, Second,Third } from './screens';
 
 
 type steps = 1 | 2 | 3 | 4
@@ -16,7 +16,8 @@ const wait = async (time = 0.3) => {
 }
 const screens = [
   First,
-  Second
+  Second,
+  Third
 ];
 class App extends Component {
   state = {
@@ -30,6 +31,11 @@ class App extends Component {
       {
         plan_type: "",
         plan_time: "",
+      },
+      {
+        online_service: false,
+        large_storage: false,
+        custom_profile: false,
       }
     ],
     filledSteps: [
@@ -90,11 +96,9 @@ class App extends Component {
   
   render(): React.ReactNode {
     const index = this.state.screen - 1;
-    let next = this.state.screen + 1;
     const RenderScreen = screens[index] ?? this.Empty;
 
-    const { filledSteps } = this.state
-    const [info, plans] = this.state.fields;
+    const [info] = this.state.fields;
 
     const tabs = info.name !== "" && info.email !== "" && info.phone !== "";
     const visibility = [
@@ -131,6 +135,7 @@ class App extends Component {
           screenProps={{
             className: "none " + this.nextScreenRenderClass
           }}
+          yearly={this.state.fields[1].plan_time != ""}
           onBefore={this.state.screen > 1 ? this.setBefore : undefined}
           onNext={this.setNext} />
       </div>

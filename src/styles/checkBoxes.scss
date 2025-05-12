@@ -1,0 +1,64 @@
+@use "colors" as *;
+@use "vars" as *;
+
+.checkBoxes_wrap {
+    display: flex;
+    flex-direction: column;
+    gap:16px;
+    .single_checkbox {
+        .item {
+            display: flex;
+            padding: 24px;
+            border-radius: 8px;
+            align-items: center;
+            border: 1px solid $border;
+            transition: $transition;
+            gap: 24px;
+            @include user-select-none;
+            cursor: pointer;
+
+            .info {
+                flex: 1
+            }
+
+            h4,
+            p {
+                margin: 0;
+            }
+            p{
+                opacity: 0.66;
+                font-size: 14px;
+            }
+
+            .checkmark {
+                @include flex-center;
+                border-radius: 4px;
+                width: 20px;
+                height: 20px;
+                border: 1px solid $border;
+                transition: $transition;
+
+                svg {
+                    transition: $transition;
+                    transform-origin: center;
+                    scale: 0;
+                }
+            }
+            .price{
+                color: $border_primary;
+            }
+        }
+
+        &.active {
+            .item {
+                border-color: $border_primary;
+                .checkmark {
+                    background-color: $primary;
+                    svg{
+                        scale: 1;
+                    }
+                }
+            }
+        }
+    }
+}
