@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "@root/styles/general.scss";
 import { BannerImage } from './components/Banner';
 
-import { First, Second,Third } from './screens';
+import { First, Second, Third } from './screens';
 
 
 type steps = 1 | 2 | 3 | 4
@@ -53,37 +53,50 @@ class App extends Component {
 
   previousIndex: steps = 1;
   nextScreenRenderClass = "";
+  animateScreen = async (index: steps, prevent: boolean = false) => {
+    let prev: steps = this.state.screen;
+
+    const right = index < prev
+    this.nextScreenRenderClass = right ? "left" : "right";
+    if (this.currentScreen) {
+      this.currentScreen.classList.add(!right ? "left" : "right");
+
+      if (!prevent) {
+        await wait(0.33);
+        this.banner?.setStep(index);
+        await wait(0.33);
+      }
+    } else {
+      if (!prevent) {
+
+        this.banner?.setStep(index);
+      }
+    }
+  }
+
+
   setScreen = async (index: steps, data?: any) => {
     this.firstRender = false;
     let prev: steps = this.state.screen;
     this.previousIndex = prev;
     const fields = [...this.state.fields];
-    if (data) {
+    if (typeof data == "object") {
       fields[prev - 1] = data;
     }
-    const right = index < prev
-    this.nextScreenRenderClass = right ? "left" : "right";
-    if (this.currentScreen) {
-      this.currentScreen.classList.add(!right ? "left" : "right");
-      
-      await wait(0.33);
-      this.banner?.setStep(index);
-      await wait(0.33);
-    }else{
-      this.banner?.setStep(index);
-    }
+    await this.animateScreen(index);
     this.setState({
       screen: index,
       fields,
-    },() =>{
+    }, () => {
     });
   }
+  
   setNext = (data?: any) => {
     let index = this.state.screen + 1;
     index = index > 4 ? 4 : index;
     this.setScreen(index as steps, data);
   }
-  setBefore = () =>{
+  setBefore = () => {
     let index = this.state.screen - 1;
     index = index < 1 ? 1 : index;
     this.setScreen(index as steps);
@@ -93,7 +106,7 @@ class App extends Component {
   currentScreen: HTMLElement | null = null;
   initialOpacity = 0.5;
   firstRender = true;
-  
+
   render(): React.ReactNode {
     const index = this.state.screen - 1;
     const RenderScreen = screens[index] ?? this.Empty;
@@ -111,7 +124,8 @@ class App extends Component {
     return (
       <div id="form" className="p-16 br-28">
         <BannerImage
-          onChangeStep={(step) => {
+          onChangeStep={async (step) => {
+            await this.animateScreen(step,true);
             this.setState({
               screen: step
             })
