@@ -2,7 +2,8 @@
 @use "vars" as *;
 
 .screen{
-    max-width: 640px;
+    width: 480px;
+    max-width: 100%;
     padding:24px;
     margin: 0 auto;
     height: 100%;

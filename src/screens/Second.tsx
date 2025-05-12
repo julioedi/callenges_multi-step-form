@@ -2,10 +2,9 @@ import React, { ChangeEvent, Component, ReactNode } from "react";
 import { Screen } from "@root/components/Screen";
 import "@root/styles/plans.scss";
 import { globalScreenProps } from "@root/components/Screen";
+import { plan_time, plan_type} from "@root/types";
 
-type SecondKeys = "plan_type" | "plan_time";
-type plan_type = "arcade" | "advanced" | "pro" | "";
-type plan_time = "year" | "";
+
 interface secondDefaultData {
     plan_type: plan_type,
     plan_time: plan_time,
@@ -19,7 +18,7 @@ interface singlePlan {
     value: string,
     prices: [number, number]
 }
-const plans: singlePlan[] = [
+export const plans: singlePlan[] = [
     {
         name: "arcade",
         value: "Arcade",
@@ -104,7 +103,7 @@ export default class Second extends Component<SecondProps> {
     }
 
     render(): ReactNode {
-        const { onNext, RenderBox, Switch } = this;
+        const { RenderBox, Switch } = this;
         const checked = this.state.plan_type == "" ? "arcade" : this.state.plan_type;
 
         const { defaultData, ...props } = this.props

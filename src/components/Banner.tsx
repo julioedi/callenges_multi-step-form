@@ -1,6 +1,8 @@
 import React, { Component, ReactNode } from "react";
 import "@root/styles/banner.scss";
 
+import { steps } from '@root/types';
+
 class SVGImage extends Component {
     width: number = 274;
     height: number = 225;
@@ -24,22 +26,20 @@ class SVGImage extends Component {
     }
 }
 
-type stepsNum = 1 | 2 | 3 | 4;
-
 interface BannerImageprops {
-    initialStep?: stepsNum,
-    onChangeStep?: (index: stepsNum) => void
+    initialStep?: steps,
+    onChangeStep?: (index: steps) => void
     visibility?:Array<boolean>
 }
 
 
 interface step {
-    index: stepsNum,
+    index: steps,
     value: string,
     visiblity?:boolean,
 }
 
-const steps: string[] = [
+const steps_list: string[] = [
     "Your Info",
     "Select Plan",
     "Add-Ons",
@@ -62,7 +62,7 @@ class BannerImage extends Component<BannerImageprops> {
      * 
      * @param index step number 1 | 2 | 3 | 4
      */
-    setStep = (index:stepsNum):void =>{
+    setStep = (index:steps):void =>{
         if (this.state.currentStep == index) {
             return;
         }
@@ -84,7 +84,6 @@ class BannerImage extends Component<BannerImageprops> {
             <li
                 className={"step_item" + active + prevent}
                 onClick={() =>{
-                    console.log(this.props?.visibility);
                     if (!this.props?.visibility?.[index - 1]) {
                         return;
                     }
@@ -112,8 +111,8 @@ class BannerImage extends Component<BannerImageprops> {
                 </div>
                 <ul className="steps">
                     {
-                        steps.map( (item,index) => (
-                            <Step value={item} index={(index + 1) as stepsNum} key={index} visiblity={this.props?.visibility?.[index]}/>
+                        steps_list.map( (item,index) => (
+                            <Step value={item} index={(index + 1) as steps} key={index} visiblity={this.props?.visibility?.[index]}/>
                         ))
                     }
                 </ul>

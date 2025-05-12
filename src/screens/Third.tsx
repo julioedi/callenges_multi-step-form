@@ -16,13 +16,13 @@ interface ThirdProps extends globalScreenProps {
     yearly?: boolean,
 }
 
-interface singlecheck {
+export interface singlecheck {
     name: plan_type,
     title: string,
     desc: string,
     price: number,
 }
-const checkBoxes: singlecheck[] = [
+export const checkBoxes: singlecheck[] = [
     {
         name: "online_service",
         title: "Online Service",
@@ -82,11 +82,8 @@ export default class Third extends Component<ThirdProps> {
     }
 
     render(): ReactNode {
-        const { onNext, RenderBox } = this;
+        const { RenderBox } = this;
 
-        console.log({
-            year: this.props.yearly
-        })
         const { defaultData, ...props } = this.props
         return (
             <Screen

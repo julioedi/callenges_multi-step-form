@@ -35,3 +35,9 @@ $transition: 0.3s ease all;
     align-items: center;
     justify-items: center;
 }
+
+@mixin list-center {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

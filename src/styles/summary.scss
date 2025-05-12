@@ -1,0 +1,74 @@
+@use "colors" as *;
+@use "vars" as *;
+
+.summary_wrap {
+    position: relative;
+    padding: 24px;
+
+    &>* {
+        position: relative;
+    }
+
+    .info {
+        @include list-center;
+
+        .price {
+            font-weight: bold;
+        }
+
+        h4 {
+            margin-top: 0;
+            margin-bottom: 4px;
+        }
+
+        .link {
+            text-decoration: underline;
+            @include user-select-none;
+            cursor: pointer;
+            opacity: 0.66;
+        }
+    }
+
+    &::before {
+        position: absolute;
+        content: "";
+        inset: 0;
+        border-radius: 8px;
+        background-color: $primary;
+        opacity: 0.05;
+    }
+
+    ul {
+        @include no_list;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-top: 24px;
+        margin-top: 24px;
+        border-top: 1px solid $border;
+
+        li {
+            @include list-center;
+            gap: 16px;
+
+            span:first-of-type {
+                opacity: 0.66;
+            }
+        }
+    }
+}
+
+.summary_result {
+    padding: 24px;
+    @include list-center;
+
+    .tag {
+        opacity: 0.66;
+    }
+
+    .total {
+        font-size: 20px;
+        font-weight: bold;
+        color: $primary;
+    }
+}

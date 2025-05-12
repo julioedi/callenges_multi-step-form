@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import "@root/styles/general.scss";
 import { BannerImage } from './components/Banner';
 
-import { First, Second, Third } from './screens';
+import { First, Second, Third, Four } from './screens';
+import { steps, formFields } from '@root/types';
 
 
-type steps = 1 | 2 | 3 | 4
 
 const wait = async (time = 0.3) => {
   await new Promise(res => {
@@ -17,33 +17,29 @@ const wait = async (time = 0.3) => {
 const screens = [
   First,
   Second,
-  Third
+  Third,
+  Four
 ];
+
+interface stateProps {
+  screen: steps,
+  names: formFields,
+  completed: boolean,
+}
 class App extends Component {
-  state = {
+  state: stateProps = {
     screen: 1 as steps,
-    fields: [
-      {
-        name: "",
-        email: "",
-        phone: ""
-      },
-      {
-        plan_type: "",
-        plan_time: "",
-      },
-      {
-        online_service: false,
-        large_storage: false,
-        custom_profile: false,
-      }
-    ],
-    filledSteps: [
-      true,
-      false,
-      false,
-      false
-    ]
+    names: {
+      name: "",
+      email: "",
+      phone: "",
+      plan_type: "",
+      plan_time: "",
+      online_service: false,
+      large_storage: false,
+      custom_profile: false,
+    },
+    completed: false,
   }
 
   Empty = () => {
@@ -79,23 +75,24 @@ class App extends Component {
     this.firstRender = false;
     let prev: steps = this.state.screen;
     this.previousIndex = prev;
-    const fields = [...this.state.fields];
-    if (typeof data == "object") {
-      fields[prev - 1] = data;
-    }
+    const names = {
+      ...this.state.names,
+      ...data,
+    };
     await this.animateScreen(index);
     this.setState({
       screen: index,
-      fields,
+      names,
     }, () => {
     });
   }
-  
+
   setNext = (data?: any) => {
     let index = this.state.screen + 1;
     index = index > 4 ? 4 : index;
     this.setScreen(index as steps, data);
   }
+
   setBefore = () => {
     let index = this.state.screen - 1;
     index = index < 1 ? 1 : index;
@@ -111,9 +108,9 @@ class App extends Component {
     const index = this.state.screen - 1;
     const RenderScreen = screens[index] ?? this.Empty;
 
-    const [info] = this.state.fields;
+    const { name, email, phone, plan_time } = this.state.names;
 
-    const tabs = info.name !== "" && info.email !== "" && info.phone !== "";
+    const tabs = name !== "" && email !== "" && phone !== "";
     const visibility = [
       true,
       tabs,
@@ -121,11 +118,12 @@ class App extends Component {
       tabs
     ]
 
+
     return (
       <div id="form" className="p-16 br-28">
         <BannerImage
           onChangeStep={async (step) => {
-            await this.animateScreen(step,true);
+            await this.animateScreen(step, true);
             this.setState({
               screen: step
             })
@@ -137,7 +135,7 @@ class App extends Component {
           visibility={visibility}
         />
         <RenderScreen
-          defaultData={this.state.fields[index] as any}
+          defaultData={this.state.names as any}
           container={async (ref) => {
             this.currentScreen = ref;
             if (!ref) {
@@ -149,7 +147,10 @@ class App extends Component {
           screenProps={{
             className: "none " + this.nextScreenRenderClass
           }}
-          yearly={this.state.fields[1].plan_time != ""}
+          changePlan={() =>{
+            this.setScreen(2)
+          }}
+          yearly={plan_time != ""}
           onBefore={this.state.screen > 1 ? this.setBefore : undefined}
           onNext={this.setNext} />
       </div>
