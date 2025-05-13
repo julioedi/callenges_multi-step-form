@@ -1,4 +1,5 @@
 $transition: 0.3s ease all;
+
 @mixin user-select-none {
     user-select: none;
     -webkit-user-select: none;
@@ -42,5 +43,17 @@ $transition: 0.3s ease all;
     justify-content: space-between;
 }
 
-$mobile_break: 720px;
+@mixin focus-card {
+
+    &:focus,
+    &:active,
+    &:focus-visible {
+        border-color: var(--border_primary);
+        outline: none;
+        background-color: var(--form_card);
+        box-shadow: 0 6px 24px -16px var(--primary);
+    }
+}
+$tablet_break: 920px;
+$mobile_break: 640px;
 $mobile_small_break: 380px;

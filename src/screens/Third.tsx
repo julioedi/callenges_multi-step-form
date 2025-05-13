@@ -43,7 +43,10 @@ export const checkBoxes: singlecheck[] = [
     }
 ];
 
-
+interface singlecheckRender extends singlecheck {
+    index: number,
+    onClick: Function
+}
 export default class Third extends Component<ThirdProps> {
     onNext = () => {
         if (!this.props.onNext) {
@@ -63,10 +66,18 @@ export default class Third extends Component<ThirdProps> {
     currentElement: null | HTMLElement = null;
 
 
-    RenderBox = ({ title, desc, price }: singlecheck) => {
-        const {yearly} = this.props;
+    RenderBox = ({ title, desc, price, index, onClick }: singlecheckRender) => {
+        const { yearly } = this.props;
         return (
-            <div className="item">
+            <div
+                className="item"
+                tabIndex={index}
+                onKeyUp={(e) => {
+                    if (e.key.match(/^(enter|space|\s+)$/i)) {
+                        onClick();
+                    }
+                }}
+            >
                 <div className="checkmark">
                     <Check />
                 </div>
@@ -93,23 +104,26 @@ export default class Third extends Component<ThirdProps> {
             >
                 <div className="checkBoxes_wrap">
                     {
-                        checkBoxes.map((item, index) => (
-                            <div
-                                className={`single_checkbox${this.state[item.name] ? " active" : ""}`}
-                                key={index}
-                                onClick={() => {
+                        checkBoxes.map((item, index) => {
+                            const onClick = () => {
 
-                                    if (this.props.defaultData) {
-                                        this.props.defaultData[item.name] = !this.state[item.name]
-                                    }
-                                    this.setState({
-                                        [item.name]: !this.state[item.name]
-                                    })
-                                }}
-                            >
-                                <RenderBox {...item} />
-                            </div>
-                        ))
+                                if (this.props.defaultData) {
+                                    this.props.defaultData[item.name] = !this.state[item.name]
+                                }
+                                this.setState({
+                                    [item.name]: !this.state[item.name]
+                                })
+                            }
+                            return (
+                                <div
+                                    className={`single_checkbox${this.state[item.name] ? " active" : ""}`}
+                                    key={index}
+                                    onClick={onClick}
+                                >
+                                    <RenderBox {...item} index={index + 1} onClick={onClick} />
+                                </div>
+                            )
+                        })
                     }
                 </div>
             </Screen>

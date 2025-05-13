@@ -39,9 +39,9 @@ class Screen extends Component<Screenprops> {
             <div className="before">
                 {
                     onBefore && (
-                        <div className="btn" onClick={onBefore}>
+                        <button className="btn" onClick={onBefore}>
                             {before ?? "Go back"}
-                        </div>
+                        </button>
                     )
                 }
             </div>
@@ -53,9 +53,9 @@ class Screen extends Component<Screenprops> {
         const { next, onNext,nextButtonClassname } = this.props;
         return (
             <div className="after">
-                <div className={"btn default" + (nextButtonClassname ? " " + nextButtonClassname : "")} onClick={onNext}>
+                <button className={"btn default" + (nextButtonClassname ? " " + nextButtonClassname : "")} onClick={onNext}>
                     {next ?? "Next Step"}
-                </div>
+                </button>
             </div>
         )
     }

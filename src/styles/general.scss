@@ -121,15 +121,30 @@ textarea {
     padding: 16px 24px;
     transition: $transition;
     border-radius: 8px;
+    background-color: transparent;
     cursor: pointer;
     @include user-select-none;
     transition: $transition;
+    outline: none;
+    border: none;
+
+    &:focus,
+    &:active,
+    &:focus-visible {
+        outline: none;
+        border: none;
+        opacity: 0.75;
+        background-color: #eee;
+    }
 
     &.default {
         background-color: $btnColor;
         color: #fff;
 
-        &:hover {
+        &:hover,
+        &:focus,
+        &:active,
+        &:focus-visible {
             background-color: $primary;
             opacity: 0.66;
         }
@@ -165,6 +180,7 @@ textarea {
 }
 
 $loaderTime: rotating 1s linear infinite;
+
 .loader {
     color: $border_primary;
     font-size: 40px;
@@ -206,6 +222,12 @@ $loaderTime: rotating 1s linear infinite;
     }
 
     .toggle {
+        &:focus,
+        &:active,
+        &:focus-visible {
+            outline:none;
+            background-color: $primary;
+        }
         position: relative;
         display: flex;
         font-size: 12px;
@@ -240,7 +262,6 @@ $loaderTime: rotating 1s linear infinite;
         }
     }
 }
-
 
 
 @media (max-width: $mobile_break) {

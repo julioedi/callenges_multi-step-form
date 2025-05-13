@@ -16,6 +16,7 @@
             transition: $transition;
             gap: 24px;
             @include user-select-none;
+            @include focus-card;
             cursor: pointer;
 
             .info {

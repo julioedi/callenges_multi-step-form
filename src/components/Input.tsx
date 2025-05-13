@@ -24,6 +24,7 @@ class Input extends Component<InputProps> {
     render(): ReactNode {
         const { label, name, onInput, errorLabel, ...props } = this.props;
 
+        const tag_name = 'field_' + name;
         return (
             <div
                 className="field_text"
@@ -32,8 +33,8 @@ class Input extends Component<InputProps> {
                 }}
                 data-error={errorLabel ?? "This field is required"}
             >
-                <label htmlFor={name}>{label}</label>
-                <input {...props} onInput={(e) => {
+                <label htmlFor={tag_name}>{label}</label>
+                <input {...props} name={tag_name} id={tag_name} onInput={(e) => {
                     this.setError(false);
                 }}
                     ref={ref =>{

@@ -2,7 +2,7 @@ import React, { ChangeEvent, Component, ReactNode } from "react";
 import { Screen } from "@root/components/Screen";
 import "@root/styles/plans.scss";
 import { globalScreenProps } from "@root/components/Screen";
-import { plan_time, plan_type} from "@root/types";
+import { plan_time, plan_type } from "@root/types";
 
 
 interface secondDefaultData {
@@ -72,12 +72,23 @@ export default class Second extends Component<SecondProps> {
         )
     }
 
+    switchRef: HTMLInputElement | null = null;
+    onCheckYear = () => {
+        const time = this.switchRef?.checked ? "year" : "";
+        if (this.props.defaultData) {
+            this.props.defaultData.plan_time = time
+        }
+        this.setState({
+            plan_time: time
+        });
+    }
     Switch = () => {
         return (
             <div className="switch_card">
                 <input
                     type="checkbox"
                     name="plan_time"
+                    tabIndex={-1}
                     defaultChecked={this.state.plan_time == "year"}
                     onChange={(e) => {
                         const time = e.target.checked ? "year" : "";
@@ -88,11 +99,22 @@ export default class Second extends Component<SecondProps> {
                             plan_time: time
                         });
                     }}
+                    ref={(ref) => {
+                        this.switchRef = ref;
+                    }}
                 />
                 <span>
                     Monthly
                 </span>
-                <div className="toggle">
+                <div
+                    className="toggle"
+                    tabIndex={4}
+                    onKeyUp={(e) => {
+                        if (e.key.match(/^(enter|space|\s+)$/i)) {
+                           this.switchRef?.click();
+                        }
+                    }}
+                >
                     <div className="dot" />
                 </div>
                 <span>
@@ -115,23 +137,33 @@ export default class Second extends Component<SecondProps> {
             >
                 <div className="plans_wrap">
                     {
-                        plans.map((item, index) => (
-                            <div
-                                className={`single_plan${checked == item.name ? " active" : ""}`}
-                                key={index}
-                                onClick={() => {
+                        plans.map((item, index) => {
 
-                                    if (this.props.defaultData) {
-                                        this.props.defaultData.plan_type = item.name
-                                    }
-                                    this.setState({
-                                        plan_type: item.name
-                                    })
-                                }}
-                            >
-                                <RenderBox {...item} />
-                            </div>
-                        ))
+                            const setItem = () => {
+
+                                if (this.props.defaultData) {
+                                    this.props.defaultData.plan_type = item.name
+                                }
+                                this.setState({
+                                    plan_type: item.name
+                                })
+                            }
+                            return (
+                                <div
+                                    className={`single_plan${checked == item.name ? " active" : ""}`}
+                                    key={index}
+                                    tabIndex={index + 1}
+                                    onClick={setItem}
+                                    onKeyUp={(e) => {
+                                        if (e.key.match(/^(enter|space|\s+)$/i)) {
+                                            setItem();
+                                        }
+                                    }}
+                                >
+                                    <RenderBox {...item} />
+                                </div>
+                            )
+                        })
                     }
                 </div>
                 <Switch />

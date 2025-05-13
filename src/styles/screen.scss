@@ -81,6 +81,14 @@
 }
 
 
+@media (max-width: $tablet_break) {
+    .screen{
+        padding:0 36px;
+        margin: 0;
+        width: 100%;
+    }
+}
+
 @media (max-width: $mobile_break) {
     .screen {
         height: unset;

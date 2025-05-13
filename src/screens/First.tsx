@@ -9,9 +9,9 @@ interface firstDefaultData {
     email: string,
     phone: string,
 }
-interface FirstProps extends globalScreenProps{
+interface FirstProps extends globalScreenProps {
     defaultData?: firstDefaultData,
-    setData?:(data:firstDefaultData) => void
+    setData?: (data: firstDefaultData) => void
 }
 export default class First extends Component<FirstProps> {
     defaultData: firstDefaultData = {
@@ -27,39 +27,47 @@ export default class First extends Component<FirstProps> {
         phone: null
     }
 
-    validateField = (key:FirstKeys,customMEssage?:string):number => {
+    validateField = (key: FirstKeys, customMEssage?: string): number => {
         const field = this.renderInputs[key];
         const data = this.defaultData[key];
         if (!field) {
             return 0;
         }
         if (data == "") {
+            field.setError();
+            return 1;
+        } else {
+            const valid = field.inputElement?.reportValidity();
+            if (!valid) {
                 field.setError();
-                return 1;
-            } else {
-                const valid = field.inputElement?.reportValidity();
-                if (!valid) {
-                    field.setError();
-                    field.inputElement?.setCustomValidity("");  // optional: reset custom error
-                    return 1;
+                if (key == "email") {
+                    field.inputElement?.setCustomValidity("Please enter a valid email adress");
+                } else if (key == "phone") {
+                    field.inputElement?.setCustomValidity("Please enter a valid Phone Number");
                 }
+                else {
+                    field.inputElement?.setCustomValidity("")
+                }
+                // field.inputElement?.setCustomValidity("");  // optional: reset custom error
+                return 1;
             }
+        }
         return 0
     }
 
     onNext = () => {
-        const {validateField} = this;
+        const { validateField } = this;
         const next = this.props.onNext;
-        let error = validateField("name") + validateField("email") + validateField("phone","Please use a valid phone number");
+        let error = validateField("name") + validateField("email") + validateField("phone", "Please use a valid phone number");
         if (error === 0 && this.props.onNext) {
-           this.props.onNext(this.defaultData)
+            this.props.onNext(this.defaultData)
         }
 
     }
-    currentElement: null| HTMLElement = null;
+    currentElement: null | HTMLElement = null;
     render(): ReactNode {
         const { onNext } = this;
-        const {defaultData,...props} = this.props
+        const { defaultData, ...props } = this.props
         return (
             <Screen
                 title="Personal Info"
@@ -85,11 +93,15 @@ export default class First extends Component<FirstProps> {
                     label="Email"
                     name="email"
                     type="email"
+                    pattern="^.*?\.[a-zA-Z0-9]{2,}$"
                     placeholder="e.g stephenkint@lorem.com"
                     defaultValue={this.defaultData.email}
                     onChange={(e) => {
                         const { value } = e.target;
                         this.defaultData.email = value;
+                    }}
+                    onKeyUp={e => {
+                        e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9._%+-@]+/, "");
                     }}
                     ref={ref => {
                         this.renderInputs["email"] = ref;
