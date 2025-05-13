@@ -30,6 +30,7 @@ interface BannerImageprops {
     initialStep?: steps,
     onChangeStep?: (index: steps) => void
     visibility?:Array<boolean>
+    commpleted?:boolean,
 }
 
 
@@ -63,7 +64,7 @@ class BannerImage extends Component<BannerImageprops> {
      * @param index step number 1 | 2 | 3 | 4
      */
     setStep = (index:steps):void =>{
-        if (this.state.currentStep == index) {
+        if (this.state.currentStep == index || this.props.commpleted) {
             return;
         }
         this.setState({
@@ -90,6 +91,9 @@ class BannerImage extends Component<BannerImageprops> {
                     this.setStep(index)
                 }}
                 data-step={index}
+                style={{
+                    pointerEvents: this.props.commpleted ? "none" : undefined
+                }}
             >
                 <div className="num">
                     {index}

@@ -5,15 +5,8 @@ import { BannerImage } from './components/Banner';
 import { First, Second, Third, Four } from './screens';
 import { steps, formFields } from '@root/types';
 
+import { wait } from '@root/utilities/wait';
 
-
-const wait = async (time = 0.3) => {
-  await new Promise(res => {
-    setTimeout(() => {
-      res(true)
-    }, time * 1000)
-  })
-}
 const screens = [
   First,
   Second,
@@ -72,6 +65,9 @@ class App extends Component {
 
 
   setScreen = async (index: steps, data?: any) => {
+    if (this.state.completed) {
+      return;
+    }
     this.firstRender = false;
     let prev: steps = this.state.screen;
     this.previousIndex = prev;
@@ -89,7 +85,11 @@ class App extends Component {
 
   setNext = (data?: any) => {
     let index = this.state.screen + 1;
-    index = index > 4 ? 4 : index;
+    if (index > 4) {
+      this.state.completed = true;
+      index = 4;
+    }
+    data = !data ? {} : data;
     this.setScreen(index as steps, data);
   }
 
@@ -105,7 +105,8 @@ class App extends Component {
   firstRender = true;
 
   render(): React.ReactNode {
-    const index = this.state.screen - 1;
+    const { screen } = this.state;
+    const index = screen - 1;
     const RenderScreen = screens[index] ?? this.Empty;
 
     const { name, email, phone, plan_time } = this.state.names;
@@ -122,13 +123,17 @@ class App extends Component {
     return (
       <div id="form" className="p-16 br-28">
         <BannerImage
+        commpleted={this.state.completed}
           onChangeStep={async (step) => {
+            if (this.state.completed) {
+              return;
+            }
             await this.animateScreen(step, true);
             this.setState({
               screen: step
             })
           }}
-          initialStep={this.state.screen}
+          initialStep={screen}
           ref={ref => {
             this.banner = ref;
           }}
@@ -145,14 +150,21 @@ class App extends Component {
             ref.className = "screen";
           }}
           screenProps={{
-            className: "none " + this.nextScreenRenderClass
+            className: "none " + this.nextScreenRenderClass,
           }}
-          changePlan={() =>{
+          changePlan={() => {
             this.setScreen(2)
           }}
           yearly={plan_time != ""}
-          onBefore={this.state.screen > 1 ? this.setBefore : undefined}
-          onNext={this.setNext} />
+          onBefore={screen > 1 ? this.setBefore : undefined}
+          next={screen != 4 ? undefined : "Confirm"}
+          onNext={this.setNext}
+          onComplete={() => {
+            this.setState({
+              completed: true,
+            })
+          }}
+        />
       </div>
     );
   }

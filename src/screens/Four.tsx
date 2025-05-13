@@ -6,11 +6,14 @@ import { formFields } from "@root/types";
 import { plans } from "./Second";
 import { checkBoxes } from "./Third";
 import { singlecheck } from "./Third";
+import Thanks from "./Completed";
 
 interface FourProps extends globalScreenProps {
     defaultData: formFields,
     yearly?: boolean,
-    changePlan?: () => void
+    changePlan?: () => void,
+    completed?:boolean
+    onComplete?:Function
 }
 
 
@@ -25,6 +28,9 @@ export default class Four extends Component<FourProps> {
             return;
         }
         this.props.onNext(this.state)
+    }
+    state = {
+        completed: false,
     }
 
     currentElement: null | HTMLElement = null;
@@ -42,7 +48,13 @@ export default class Four extends Component<FourProps> {
 
     render(): ReactNode {
         const { RenderBox } = this;
-        const { defaultData, ...props } = this.props;
+        const {completed} = this.state;
+        const { defaultData,...props } = this.props;
+        if (completed) {
+            return(
+                <Thanks data={defaultData as any}/>
+            )
+        }
         const { plan_time, plan_type } = defaultData;
         const pre = plans.filter(item => item.name == defaultData?.plan_type);
         const active = pre[0] ?? plans[0];
@@ -58,6 +70,15 @@ export default class Four extends Component<FourProps> {
                 title="Finishing up"
                 description="Add-onns help enhance your gaming experience"
                 {...props}
+                nextButtonClassname="primary"
+                onNext={() =>{
+                    if (this.props?.onComplete) {
+                        this.props?.onComplete();
+                        this.setState({
+                            completed:true
+                        })
+                    }
+                }}
             >
                 <div className="summary_wrap">
                     <div className="info">

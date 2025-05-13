@@ -4,7 +4,8 @@
 .checkBoxes_wrap {
     display: flex;
     flex-direction: column;
-    gap:16px;
+    gap: 16px;
+
     .single_checkbox {
         .item {
             display: flex;
@@ -25,7 +26,8 @@
             p {
                 margin: 0;
             }
-            p{
+
+            p {
                 opacity: 0.66;
                 font-size: 14px;
             }
@@ -44,7 +46,8 @@
                     scale: 0;
                 }
             }
-            .price{
+
+            .price {
                 color: $border_primary;
             }
         }
@@ -52,11 +55,39 @@
         &.active {
             .item {
                 border-color: $border_primary;
+
                 .checkmark {
                     background-color: $primary;
-                    svg{
+
+                    svg {
                         scale: 1;
                     }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: $mobile_break) {
+    .checkBoxes_wrap {
+
+        .single_checkbox {
+            .item {
+                padding: 12px;
+                gap:8px;
+            }
+        }
+    }
+}
+
+
+@media (max-width: $mobile_break) {
+    .checkBoxes_wrap {
+
+        .single_checkbox {
+            .item {
+                p{
+                    font-size: 12px;
                 }
             }
         }

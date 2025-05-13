@@ -1,42 +1,122 @@
 @use "colors" as *;
 @use "vars" as *;
 
-.screen{
+@keyframes opacity-in{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+.screen {
     width: 480px;
     max-width: 100%;
-    padding:24px;
     margin: 0 auto;
     height: 100%;
     display: flex;
     flex-direction: column;
     transition: 0.75s ease all;
-    &.left{
+
+    &.fetching,
+    &.completed {
+        overflow: hidden;
+        .content{
+        overflow: hidden;
+            @include flex-center;
+            height: 100%;
+            text-align: center;
+            .item{
+                transition: $transition;
+                animation: 1s opacity-in ease-in forwards;
+            }
+        }
+    }
+
+    &.left {
         transform: translateX(-48px);
     }
-    &.right{
+
+    &.right {
         transform: translateX(48px);
     }
-    &.left,&.right,&.none{
+
+    &.left,
+    &.right,
+    &.none {
         opacity: 0;
     }
-    .content{
-        flex:1;
+
+    .content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0 24px 12px;
     }
-    h2{
-        margin-top:20px;
+
+    h2 {
+        margin-top: 20px;
         margin-bottom: 12px;
     }
-    h3{
-        margin:0;
+
+    h3 {
+        margin: 0;
         opacity: 0.5;
         font-weight: 400;
         font-size: 16px;
         margin-bottom: 36px;
     }
-    footer{
+
+    &~footer,
+    footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap:16px;
+        gap: 16px;
+    }
+
+    &~footer {
+        display: none;
+    }
+}
+
+
+@media (max-width: $mobile_break) {
+    .screen {
+        height: unset;
+        z-index: 99;
+        position: relative;
+        background-color: $form_card;
+        padding: 0;
+        border-radius: inherit;
+        height:100vh;
+        max-height: calc(100vh - 192px);
+
+        header {
+            padding: 24px 24px 0;
+        }
+
+        .content {
+            padding: 0 24px 24px;
+        }
+
+        h2 {
+            margin-top: 8px;
+        }
+
+        &~footer {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 24px;
+
+            background-color: $form_card;
+        }
+
+        &>footer {
+            display: none;
+        }
     }
 }

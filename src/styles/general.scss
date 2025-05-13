@@ -61,6 +61,8 @@ body {
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    scrollbar-color: $primary $border_primary;
+    scrollbar-width: thin;
 }
 
 a {
@@ -121,6 +123,7 @@ textarea {
     border-radius: 8px;
     cursor: pointer;
     @include user-select-none;
+    transition: $transition;
 
     &.default {
         background-color: $btnColor;
@@ -131,6 +134,51 @@ textarea {
             opacity: 0.66;
         }
     }
+
+    &.primary {
+        background-color: $primary;
+        color: #fff;
+
+        &:hover {
+            opacity: 0.66;
+        }
+    }
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+
+    }
+}
+
+$loaderTime: rotating 1s linear infinite;
+.loader {
+    color: $border_primary;
+    font-size: 40px;
+    width: 1em;
+    height: 1em;
+    border: 0.1em solid currentColor;
+    border-top-color: transparent;
+    animation: 1s;
+    border-radius: 1em;
+    -webkit-animation: $loaderTime;
+    -moz-animation: $loaderTime;
+    -ms-animation: $loaderTime;
+    -o-animation: $loaderTime;
+    animation: $loaderTime;
 }
 
 .switch_card {
@@ -187,27 +235,37 @@ textarea {
         z-index: 99;
         cursor: pointer;
 
-        &:checked ~.toggle .dot {
+        &:checked~.toggle .dot {
             left: 1.5em;
         }
     }
 }
 
-@keyframes popdown{
-    0% {
-        transform: scale(1);
-    }
-    33% {
-        transform: scale(1.05);
+
+
+@media (max-width: $mobile_break) {
+    body {
+        overflow: hidden;
     }
 
-    75% {
-        transform: scale(0.33);
-        opacity: 0.5;
+    #root {
+        position: unset;
+        align-items: unset;
+        padding-top: 96px;
+        padding-bottom: 96px;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
-    100%{
-        
-        transform: scale(0);
-        opacity: 0;
+
+    #form {
+        max-width: 100vw;
+        padding: 0 16px;
+        background-color: transparent;
+        border-radius: 12px;
+        height: max-content;
+
+        content {
+            padding: 0;
+        }
     }
 }
