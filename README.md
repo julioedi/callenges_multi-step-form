@@ -5,4 +5,5 @@ Practica challenge using React + Typescript
 ## Links
 
 Challenge: https://www.frontendmentor.io/challenges/multistep-form-YVAnSdqQBJ?tab=submit
-Live: https://challenges.julioedi.com/multi-step-form
+
+Live: https://challenges.julioedi.com/multi-step-form || https://callenges-multi-step-form.vercel.app/
