@@ -106,7 +106,10 @@ module.exports = {
           from: path.resolve(__dirname, 'public'), // Copy everything from public
           to: path.resolve(__dirname, 'dist'), // To the dist folder
           globOptions: {
-            ignore: ['**/index.html'], // Ignore index.html since it's handled by HtmlWebpackPlugin
+            ignore: [
+              '**/index.html',// Ignore index.html since it's handled by HtmlWebpackPlugin
+              '**/design'
+            ], 
           },
         },
       ],
